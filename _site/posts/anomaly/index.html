@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>try1.github.io - Introduction to Anomaly Detection</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">try1.github.io</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Introduction to Anomaly Detection</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="i.-anomaly-detection" class="level3">
+<h3 class="anchored" data-anchor-id="i.-anomaly-detection">I. Anomaly Detection</h3>
+<section id="a.-brief-overview-of-anomaly-detection" class="level4">
+<h4 class="anchored" data-anchor-id="a.-brief-overview-of-anomaly-detection">A. Brief Overview of Anomaly Detection</h4>
+<p>Anomaly detection is the process of identifying data points that deviate from the normal behavior of a dataset. These deviations are often referred to as anomalies or outliers. Anomaly detection is crucial in various fields such as fraud detection, fault detection, and quality control, where identifying unusual patterns is of great importance.</p>
+</section>
+<section id="b.-importance-of-detecting-outliers-in-datasets" class="level4">
+<h4 class="anchored" data-anchor-id="b.-importance-of-detecting-outliers-in-datasets">B. Importance of Detecting Outliers in Datasets</h4>
+<p>Detecting outliers is essential for maintaining the integrity of data analysis and machine learning models. Outliers can significantly impact statistical measures and the performance of predictive models, leading to inaccurate results and skewed insights.</p>
+</section>
+<section id="c.-common-applications-of-anomaly-detection-in-various-industries" class="level4">
+<h4 class="anchored" data-anchor-id="c.-common-applications-of-anomaly-detection-in-various-industries">C. Common Applications of Anomaly Detection in Various Industries</h4>
+<ol type="1">
+<li><strong>Cybersecurity:</strong>
+<ul>
+<li><strong>Intrusion Detection:</strong> Identifying unusual patterns in network traffic or system logs to detect potential cyber attacks or security breaches.</li>
+<li><strong>Fraud Detection:</strong> Detecting anomalous transactions or activities that may indicate fraudulent behavior in online transactions or financial systems.</li>
+</ul></li>
+<li><strong>Finance:</strong>
+<ul>
+<li><strong>Credit Card Fraud Detection:</strong> Identifying unusual spending patterns or transactions that may indicate fraudulent use of credit cards.</li>
+<li><strong>Algorithmic Trading:</strong> Detecting anomalies in financial market data to identify potential trading opportunities or risks.</li>
+</ul></li>
+<li><strong>Healthcare:</strong>
+<ul>
+<li><strong>Disease Outbreak Detection:</strong> Monitoring health data to identify unusual patterns that may indicate the outbreak of diseases or public health emergencies.</li>
+<li><strong>Patient Monitoring:</strong> Detecting abnormal physiological parameters in real-time for early identification of health issues.</li>
+</ul></li>
+<li><strong>Manufacturing:</strong>
+<ul>
+<li><strong>Quality Control:</strong> Identifying defective products or anomalies in the manufacturing process by monitoring sensor data and production metrics.</li>
+<li><strong>Predictive Maintenance:</strong> Detecting unusual equipment behavior to predict and prevent equipment failures before they occur.</li>
+</ul></li>
+</ol>
+</section>
+</section>
+<section id="ii.-significance-of-detecting-outliers-in-data" class="level3">
+<h3 class="anchored" data-anchor-id="ii.-significance-of-detecting-outliers-in-data">II. Significance of Detecting Outliers in Data</h3>
+<section id="a.-impact-of-outliers-on-data-analysis-and-model-performance" class="level4">
+<h4 class="anchored" data-anchor-id="a.-impact-of-outliers-on-data-analysis-and-model-performance">A. Impact of Outliers on Data Analysis and Model Performance</h4>
+<p>Outliers can significantly distort statistical measures and machine learning model performance. Let’s demonstrate this impact using a simple example with the Iris dataset.</p>
+</section>
+<section id="b.-challenges-posed-by-outliers-in-real-world-datasets" class="level4">
+<h4 class="anchored" data-anchor-id="b.-challenges-posed-by-outliers-in-real-world-datasets">B. Challenges Posed by Outliers in Real-World Datasets</h4>
+<p>Outliers pose challenges such as increased variance, skewed model training, and reduced interpretability. Let’s consider a scenario where outliers affect the performance of a machine learning model.</p>
+</section>
+</section>
+<section id="iii.-dbscan-as-an-outlier-detection-method" class="level3">
+<h3 class="anchored" data-anchor-id="iii.-dbscan-as-an-outlier-detection-method">III. DBSCAN as an Outlier Detection Method</h3>
+<section id="a.-introduction-to-dbscan-density-based-spatial-clustering-of-applications-with-noise" class="level4">
+<h4 class="anchored" data-anchor-id="a.-introduction-to-dbscan-density-based-spatial-clustering-of-applications-with-noise">A. Introduction to DBSCAN (Density-Based Spatial Clustering of Applications with Noise)</h4>
+<p>DBSCAN is a density-based clustering algorithm that can also be utilized for detecting outliers. It works by defining clusters as dense regions separated by sparser areas. The key idea is that a cluster is a dense area of data points separated by areas of lower point density.</p>
+</section>
+<section id="b.-key-concepts-core-points-border-points-and-noise" class="level4">
+<h4 class="anchored" data-anchor-id="b.-key-concepts-core-points-border-points-and-noise">B. Key Concepts: Core Points, Border Points, and Noise</h4>
+<ol type="1">
+<li><strong>Core Points:</strong>
+<ul>
+<li>Core points are data points that have a sufficient number of neighboring points within a specified distance (eps).</li>
+<li>These points are at the heart of a dense region.</li>
+</ul></li>
+<li><strong>Border Points:</strong>
+<ul>
+<li>Border points are on the edge of a dense region but do not have enough neighbors to be considered core points.</li>
+<li>They are part of the cluster but not as central.</li>
+</ul></li>
+<li><strong>Noise:</strong>
+<ul>
+<li>Noise points are data points that do not belong to any cluster.</li>
+<li>They are typically isolated points.</li>
+</ul></li>
+</ol>
+</section>
+<section id="c.-advantages-of-dbscan-for-anomaly-detection" class="level4">
+<h4 class="anchored" data-anchor-id="c.-advantages-of-dbscan-for-anomaly-detection">C. Advantages of DBSCAN for Anomaly Detection</h4>
+<ul>
+<li><strong>Robust to Density Variations:</strong>
+<ul>
+<li>DBSCAN can handle clusters of different shapes and sizes, making it robust to variations in point density.</li>
+</ul></li>
+<li><strong>Doesn’t Require Pre-specification of Clusters:</strong>
+<ul>
+<li>Unlike some other algorithms, DBSCAN does not require specifying the number of clusters beforehand.</li>
+</ul></li>
+<li><strong>Handles Outliers Naturally:</strong>
+<ul>
+<li>DBSCAN naturally identifies outliers as noise points, making it suitable for anomaly detection.</li>
+</ul></li>
+</ul>
+</section>
+<section id="d.-limitations-and-considerations-when-using-dbscan" class="level4">
+<h4 class="anchored" data-anchor-id="d.-limitations-and-considerations-when-using-dbscan">D. Limitations and Considerations when Using DBSCAN</h4>
+<ul>
+<li><strong>Sensitive to Distance Metric and Parameters:</strong>
+<ul>
+<li>The choice of distance metric and parameters like epsilon (eps) and minimum points (min_samples) can impact the results.</li>
+</ul></li>
+<li><strong>Difficulty with Varying Density:</strong>
+<ul>
+<li>DBSCAN may struggle with datasets containing clusters of varying densities.</li>
+</ul></li>
+</ul>
+<p>Now, let’s demonstrate the application of DBSCAN for outlier detection using the Iris dataset.</p>
+</section>
+</section>
+<section id="iv.-implementing-dbscan-for-anomaly-detection" class="level3">
+<h3 class="anchored" data-anchor-id="iv.-implementing-dbscan-for-anomaly-detection">IV. Implementing DBSCAN for Anomaly Detection</h3>
+<p>For this example, let’s use the Iris dataset available in scikit-learn. We’ll load the dataset and scale the features for better performance.</p>
+<section id="code-example" class="level5">
+<h5 class="anchored" data-anchor-id="code-example">Code Example:</h5>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> DBSCAN</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the Iris dataset</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> iris.data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scale the data for better performance</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data_scaled <span class="op">=</span> StandardScaler().fit_transform(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="c.-configuring-dbscan-parameters-for-effective-outlier-detection" class="level4">
+<h4 class="anchored" data-anchor-id="c.-configuring-dbscan-parameters-for-effective-outlier-detection">C. Configuring DBSCAN Parameters for Effective Outlier Detection</h4>
+<p>Configuring DBSCAN involves setting two main parameters: - <code>eps</code>: The maximum distance between two samples for one to be considered as in the neighborhood of the other. - <code>min_samples</code>: The number of samples (or total weight) in a neighborhood for a point to be considered as a core point.</p>
+<section id="code-example-1" class="level5">
+<h5 class="anchored" data-anchor-id="code-example-1">Code Example:</h5>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply DBSCAN for outlier detection</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>dbscan <span class="op">=</span> DBSCAN(eps<span class="op">=</span><span class="fl">0.6</span>, min_samples<span class="op">=</span><span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="d.-applying-dbscan-to-identify-anomalies-in-the-dataset" class="level4">
+<h4 class="anchored" data-anchor-id="d.-applying-dbscan-to-identify-anomalies-in-the-dataset">D. Applying DBSCAN to Identify Anomalies in the Dataset</h4>
+<p>Apply the configured DBSCAN model to identify anomalies in the dataset. Outliers will be labeled as -1 in the result.</p>
+<section id="code-example-2" class="level5">
+<h5 class="anchored" data-anchor-id="code-example-2">Code Example:</h5>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>outliers_dbscan <span class="op">=</span> dbscan.fit_predict(data_scaled)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the number of outliers identified</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>num_outliers <span class="op">=</span> <span class="bu">sum</span>(outliers_dbscan <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Number of outliers detected: </span><span class="sc">{</span>num_outliers<span class="sc">}</span><span class="ss">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of outliers detected: 32</code></pre>
+</div>
+</div>
+<p>Now, let’s visualize the results using a scatter plot. ##### Code Example:</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize the results using a scatter plot</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span>data_scaled[:, <span class="dv">0</span>], y<span class="op">=</span>data_scaled[:, <span class="dv">1</span>], hue<span class="op">=</span>outliers_dbscan, palette<span class="op">=</span><span class="st">'Set2'</span>, s<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Outlier Detection with DBSCAN in Iris Dataset'</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Feature 1 (Scaled)'</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Feature 2 (Scaled)'</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>plt.legend(title<span class="op">=</span><span class="st">'Outlier Label'</span>, loc<span class="op">=</span><span class="st">'upper right'</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-7-output-1.png" width="810" height="523"></p>
+</div>
+</div>
+<p>In this example, DBSCAN is applied to the Iris dataset to detect outliers. The resulting scatter plot visualizes the clustering of points, with outliers labeled accordingly. Adjust the <code>eps</code> and <code>min_samples</code> parameters based on your dataset characteristics.</p>
+</section>
+</section>
+</section>
+<section id="v.-interpretation-of-dbscan-labels-for-outliers" class="level3">
+<h3 class="anchored" data-anchor-id="v.-interpretation-of-dbscan-labels-for-outliers">V. Interpretation of DBSCAN Labels for Outliers</h3>
+<section id="a.-understanding-dbscan-labels-core-points-border-points-and-noise" class="level4">
+<h4 class="anchored" data-anchor-id="a.-understanding-dbscan-labels-core-points-border-points-and-noise">A. Understanding DBSCAN Labels: Core Points, Border Points, and Noise</h4>
+<p>In DBSCAN, the fit_predict method assigns labels to each data point. The labels can be: - <code>-1</code>: Noise points (outliers) - <code>0, 1, 2, ...</code>: Cluster labels - <code>core_sample_indices_</code>: Indices of core points</p>
+</section>
+<section id="b.-differentiating-between-normal-and-anomalous-data-points" class="level4">
+<h4 class="anchored" data-anchor-id="b.-differentiating-between-normal-and-anomalous-data-points">B. Differentiating Between Normal and Anomalous Data Points</h4>
+<p>Normal data points typically belong to a cluster and are labeled with a non-negative integer. Anomalous data points (outliers) are labeled with -1.</p>
+<section id="code-example-3" class="level5">
+<h5 class="anchored" data-anchor-id="code-example-3">Code Example:</h5>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assume dbscan is a fitted DBSCAN model</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Access the labels assigned by DBSCAN</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> dbscan.labels_</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify core points</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>core_points_indices <span class="op">=</span> dbscan.core_sample_indices_</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>core_points <span class="op">=</span> data_scaled[core_points_indices]</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize normal and anomalous points</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span>data_scaled[:, <span class="dv">0</span>], y<span class="op">=</span>data_scaled[:, <span class="dv">1</span>], hue<span class="op">=</span>labels, palette<span class="op">=</span><span class="st">'Set2'</span>, s<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>plt.scatter(core_points[:, <span class="dv">0</span>], core_points[:, <span class="dv">1</span>], marker<span class="op">=</span><span class="st">'x'</span>, color<span class="op">=</span><span class="st">'black'</span>, label<span class="op">=</span><span class="st">'Core Points'</span>)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'DBSCAN Labels for Outlier Detection in Iris Dataset'</span>)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Feature 1 (Scaled)'</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Feature 2 (Scaled)'</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>plt.legend(title<span class="op">=</span><span class="st">'Label'</span>, loc<span class="op">=</span><span class="st">'upper right'</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-8-output-1.png" width="810" height="523"></p>
+</div>
+</div>
+<p>In this example, core points are marked with ‘x’ in the scatter plot, helping to differentiate them from other data points.</p>
+</section>
+</section>
+<section id="c.-strategies-for-interpreting-and-analyzing-dbscan-results" class="level4">
+<h4 class="anchored" data-anchor-id="c.-strategies-for-interpreting-and-analyzing-dbscan-results">C. Strategies for Interpreting and Analyzing DBSCAN Results</h4>
+<ol type="1">
+<li><strong>Density of Clusters:</strong>
+<ul>
+<li>Observe the density of clusters. Denser regions often contain core points, while sparser areas may have border points.</li>
+</ul></li>
+<li><strong>Isolation of Noise Points:</strong>
+<ul>
+<li>Examine the isolation of noise points. Outliers are often located in regions with low point density.</li>
+</ul></li>
+<li><strong>Optimal Parameter Selection:</strong>
+<ul>
+<li>Experiment with different values of <code>eps</code> and <code>min_samples</code> to find the optimal parameters for your dataset.</li>
+</ul></li>
+</ol>
+</section>
+</section>
+<section id="vi.-conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="vi.-conclusion">VI. Conclusion</h3>
+<p>Anomaly detection is a powerful tool for uncovering hidden patterns and irregularities in your data, leading to more informed decision-making. Whether you are working with financial data, sensor readings, or any other type of dataset, the principles discussed in this blog post can be applied to enhance your data analysis journey.</p>
+<section id="summary-of-key-takeaways-from-the-blog-post" class="level4">
+<h4 class="anchored" data-anchor-id="summary-of-key-takeaways-from-the-blog-post">Summary of Key Takeaways from the Blog Post</h4>
+<ol type="1">
+<li><strong>Introduction to Anomaly Detection:</strong>
+<ul>
+<li>Understanding the significance of detecting outliers in datasets.</li>
+</ul></li>
+<li><strong>DBSCAN as an Outlier Detection Method:</strong>
+<ul>
+<li>Leveraging the density-based clustering approach of DBSCAN for effective anomaly detection.</li>
+</ul></li>
+<li><strong>Interpretation of DBSCAN Labels:</strong>
+<ul>
+<li>Understanding the meaning of DBSCAN labels and differentiating between core points, border points, and noise.</li>
+</ul></li>
+</ol>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> DBSCAN</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_blobs</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate sample data</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>data, labels <span class="op">=</span> make_blobs(n_samples<span class="op">=</span><span class="dv">500</span>, centers<span class="op">=</span><span class="dv">2</span>, cluster_std<span class="op">=</span><span class="fl">0.40</span>, random_state<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>outliers <span class="op">=</span> np.array([[<span class="dv">4</span>, <span class="dv">2</span>]])</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Add outliers to the data</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> np.concatenate([data, outliers], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply DBSCAN</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>dbscan <span class="op">=</span> DBSCAN(eps<span class="op">=</span><span class="fl">0.3</span>, min_samples<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>clusters <span class="op">=</span> dbscan.fit_predict(data)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Label outliers as True (1) and non-outliers as False (0)</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>outlier_labels <span class="op">=</span> (clusters <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize the results</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>scatter <span class="op">=</span> plt.scatter(data[:, <span class="dv">0</span>], data[:, <span class="dv">1</span>], c<span class="op">=</span>outlier_labels, cmap<span class="op">=</span><span class="st">'viridis'</span>)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'DBSCAN Anomaly Detection'</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Feature 1'</span>)</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Feature 2'</span>)</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a legend with specified colors</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>legend_labels <span class="op">=</span> [<span class="st">'Non-Outliers'</span>, <span class="st">'Outliers'</span>]</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>legend_handles <span class="op">=</span> [plt.Line2D([<span class="dv">0</span>], [<span class="dv">0</span>], marker<span class="op">=</span><span class="st">'o'</span>, color<span class="op">=</span><span class="st">'w'</span>, markerfacecolor<span class="op">=</span>scatter.cmap(<span class="fl">0.0</span>), markersize<span class="op">=</span><span class="dv">10</span>),</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>                  plt.Line2D([<span class="dv">0</span>], [<span class="dv">0</span>], marker<span class="op">=</span><span class="st">'o'</span>, color<span class="op">=</span><span class="st">'w'</span>, markerfacecolor<span class="op">=</span>scatter.cmap(<span class="fl">1.0</span>), markersize<span class="op">=</span><span class="dv">10</span>)]</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>plt.legend(legend_handles, legend_labels)</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-9-output-1.png" width="576" height="449"></p>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
